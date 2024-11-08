@@ -1,0 +1,125 @@
+/* Genel Layout Ayarları */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+.layout {
+   font-family: 'JetBrains Mono', monospace; /* Fontu JetBrains Mono yap */
+   background-color: #f9f9f9; /* Açık tema için arka plan */
+   color: #333;
+   min-height: 80vh;
+   display: flex;
+   flex-direction: column;
+}
+
+.logo {
+   height: 60px; /* Logonun yüksekliğini ayarlayabilirsin */
+}
+
+.nav-logo {
+   height: 50px;
+   margin-left: 5px;
+   margin-right: 5px;
+}
+ 
+ /* Header Stili */
+ .header {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   padding: 2px 4px;
+   background-color: #eaf7ff;
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+   font-size: 20px;
+   gap: 10px; /* Logo ve başlık arasında boşluk bırakmak için */
+}
+ 
+.app-title-prod {
+   color: #0056b3; /* Hafif mavi ton */
+   font-weight: bold;
+   margin: 0;
+}
+.app-title-mate {
+   color: #e4a00e; /* Hafif mavi ton */
+   font-weight: bold;
+   margin: 0;
+}
+ 
+
+ 
+ /* Sekme Stili */
+ .nav-tabs {
+   display: flex;
+   justify-content: center;
+   background-color: #e3f2fd;
+   padding: 5px;
+ }
+ 
+ .tab {
+   background: none;
+   border: none;
+   font-size: 16px;
+   font-weight: bold;
+   padding: 5px 15px;
+   color: #0056b3;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   margin-left: 5px;
+   margin-right: 5px;
+ }
+ 
+ 
+ .tab:hover {
+   background-color: #cce7ff;
+   border-radius: 4px;
+ }
+ 
+/* Kullanıcı hesap ikonu ve dropdown menü için stil */
+.user-account {
+   position: absolute;
+   top: 10px;
+   right: 20px;
+   cursor: pointer;
+   display: inline-block;
+   text-align: center;
+}
+
+.user-account .account-icon {
+   height: 50px;
+   border-radius: 50%;
+   margin-right: 40px;
+}
+
+/* Dropdown menünün görünümü */
+.user-account .dropdown-content {
+   display: none;
+   position: absolute;
+   right: 0;
+   background-color: white;
+   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+   z-index: 1;
+   min-width: 150px;
+}
+
+.user-account:hover .dropdown-content {
+   display: block;
+}
+
+.user-account .dropdown-content a {
+   color: black;
+   padding: 8px 12px;
+   text-decoration: none;
+   display: block;
+}
+
+.user-account .dropdown-content a:hover {
+   background-color: #ddd;
+}
+
+
+ /* İçerik Alanı */
+ .content {
+   padding: 20px;
+   flex-grow: 1;
+ }
+ 
