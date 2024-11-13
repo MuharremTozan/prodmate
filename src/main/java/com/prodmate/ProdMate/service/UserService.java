@@ -3,10 +3,8 @@ package com.prodmate.ProdMate.service;
 import com.prodmate.ProdMate.model.User;
 import com.prodmate.ProdMate.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -15,19 +13,23 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    public BCryptPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
-    public User registerUser(User user) {
+
+    public void registerUser(User user) throws Exception {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new Exception("Email is already in use");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User loginUser(String email, String password) throws Exception {
+        User user = userRepository.findByEmail(email);
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+            throw new Exception("Invalid email or password");
+        }
+        return user;
     }
 
-    public boolean authenticateUser(String email, String password) {
-        Optional<User> user = findByEmail(email);
-        return user.isPresent() && passwordEncoder.matches(password, user.get().getPassword());
-    }
 }
