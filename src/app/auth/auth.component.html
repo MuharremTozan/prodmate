@@ -1,0 +1,24 @@
+<div class="auth-container">
+   <div class="auth-form">
+     <h2>Login</h2>
+     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <label for="loginEmail">Email</label>
+      <input type="email" id="loginEmail" formControlName="email">
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" formControlName="password">
+      <button type="submit">Login</button>
+    </form>
+   </div>
+ 
+   <div class="auth-form">
+     <h2>Register</h2>
+     <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <label for="registerEmail">Email</label>
+      <input type="email" id="registerEmail" formControlName="email">
+      <label for="registerPassword">Password</label>
+      <input type="password" id="registerPassword" formControlName="password">
+      <button type="submit">Register</button>
+    </form>
+   </div>
+ </div>
+ 
