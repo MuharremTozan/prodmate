@@ -1,0 +1,60 @@
+.stock-management {
+   padding: 20px;
+ }
+ 
+ .btn-add {
+   margin: 10px 0;
+   padding: 10px 20px;
+   background: #007bff;
+   color: white;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+ }
+ 
+ table {
+   width: 100%;
+   border-collapse: collapse;
+ }
+ 
+ table th, table td {
+   border: 1px solid #ddd;
+   padding: 10px;
+   text-align: left;
+ }
+ 
+ table th {
+   background: #f4f4f4;
+ }
+ 
+ .popup {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100vw;
+   height: 100vh;
+   background: rgba(0, 0, 0, 0.5);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ }
+ 
+ .popup-content {
+   background: white;
+   padding: 20px;
+   border-radius: 8px;
+   width: 300px;
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+ }
+ 
+ label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
+}

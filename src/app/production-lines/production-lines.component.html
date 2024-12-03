@@ -1,3 +1,18 @@
-<p>production-lines works!</p>
-<h2>Production Lines</h2>
-<p>Welcome to your production lines dashboard!</p>
+<div class="production-lines">
+  <h1>Production Lines</h1>
+
+  <form [formGroup]="productionLineForm" (ngSubmit)="createProductionLine()">
+    <input
+      type="text"
+      placeholder="Enter production line name"
+      formControlName="name"
+    />
+    <button type="submit">Create Production Line</button>
+  </form>
+</div>
+
+ <div class="line-list">
+    <div *ngFor="let line of productionLines" class="line-card" (click)="navigateToLine(line.productionLineId)">
+      {{ line.name }}
+    </div>
+  </div>

@@ -1,0 +1,89 @@
+<div>
+  <button (click)="openPartForm()" class="btn-create">Create Part</button>
+
+  <button (click)="openMaterialReport()">Needed Materials Report</button>
+
+<!-- Needed Materials Report Modal -->
+<div *ngIf="isReportModalOpen" class="modal">
+  <div class="modal-content">
+    <h3>Needed Materials Report</h3>
+    <form [formGroup]="produceTimesForm">
+      <label for="produceTimes">Produce X Times</label>
+      <input id="produceTimes" type="number" formControlName="produceTimes" />
+    </form>
+    <button (click)="calculateNeededMaterials()">Calculate</button>
+    <div *ngIf="materialReport && materialReport.length > 0">
+      <h4>Report:</h4>
+      <ul>
+        <li *ngFor="let item of materialReport">
+          {{ item.stockName }}: {{ item.totalAmount }}
+        </li>
+      </ul>
+    </div>
+    <button (click)="closeMaterialReport()">Close</button>
+  </div>
+</div>
+
+
+
+  <!-- Part List -->
+  <ul *ngIf="parts.length > 0" class="part-list">
+    <li *ngFor="let part of parts">
+      Name: {{ part.name }} - 
+      Quantity: {{ part.quantity }} - 
+      Purchase Price: {{ part.purchasePrice }} - 
+      Sale Price: {{ part.salePrice }}
+      <ul *ngIf="part.requirements.length > 0">
+        <li *ngFor="let req of part.requirements">
+          Required Stock: {{ req.stockName }} - Amount: {{ req.amount }}
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <p *ngIf="parts.length === 0">No parts available</p>
+
+  <!-- Popup Form -->
+  <div class="popup-overlay" *ngIf="showPopup">
+    <div class="popup-content">
+      <form [formGroup]="partForm" (ngSubmit)="createPart()">
+        <label for="name">Part Name:</label>
+        <input id="name" formControlName="name" type="text" />
+      
+        <label for="quantity">Quantity:</label>
+        <input id="quantity" formControlName="quantity" type="number" />
+      
+        <label for="purchasePrice">Purchase Price:</label>
+        <input id="purchasePrice" formControlName="purchasePrice" type="number" />
+      
+        <label for="salePrice">Sale Price:</label>
+        <input id="salePrice" formControlName="salePrice" type="number" />
+      
+        <div class="requirements-section">
+          <h4>Stock Requirements</h4>
+          <div *ngFor="let requirement of stockRequirements.controls; let i = index" [formGroup]="getRequirementFormGroup(i)" class="requirement-item">
+            <!-- Dropdown for stock selection -->
+            <select formControlName="stockId">
+              <option *ngFor="let stock of stocks" [value]="stock.stockId">{{ stock.name }}</option>
+            </select>
+            <!-- Amount input -->
+            <input type="number" formControlName="amount" placeholder="Amount" />
+            <button type="button" (click)="removeStockRequirement(i)">Remove</button>
+          </div>
+          <button type="button" (click)="addStockRequirement()">Add Stock Requirement</button>
+        </div>
+      
+        <div class="checkbox-container">
+          <input type="checkbox" formControlName="isFinalProduct" />
+          <label for="isFinalProduct">Is Final Product</label>
+        </div>
+
+        <div *ngIf="partForm.get('isFinalProduct')?.value" class="alert alert-info">
+          Selecting "Is Final Product" will create a new production line for this part.
+        </div>
+      
+        <button type="submit">Create</button>
+        <button type="button" (click)="closePartForm()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -16,6 +16,7 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/login`, { email, password }).pipe(
       tap(response => {
         this.showSuccess(response.message || 'Login successful!');
+        sessionStorage.setItem('userId', response.userId);
       }),
       catchError(error => {
         const errorMsg = error.error?.error || 'Login failed!';
@@ -39,12 +40,19 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return !!sessionStorage.getItem('userId');
   }
   
   logout(): void {
-    localStorage.removeItem('token');
-    // Gerekirse diğer işlemler
+    sessionStorage.removeItem('userId');
+  }
+
+  getUserId(): string | null {
+    const userId = sessionStorage.getItem('userId');
+    if (!userId) {
+      console.error('User ID not found in session storage.');
+    }
+    return userId;
   }
 
   public showSuccess(message: string) {

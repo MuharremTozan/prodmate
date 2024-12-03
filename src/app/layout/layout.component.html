@@ -8,8 +8,7 @@
     <div class="user-account">
       <img src="../../img/account.png" class="account-icon" />
       <div class="dropdown-content">
-         <a href="#">My Account</a>
-         <a href="#">Sign Out</a>
+         <a (click)="logout()">Logout</a>
       </div>
    </div>
 
@@ -25,7 +24,7 @@
      <button class="tab" routerLink="/stock-management">
       <img src="../../img/stock_logo.png" class="nav-logo"> Stock Management
      </button>
-     <button class="tab" routerLink="/sales-reports">
+     <button class="tab" routerLink="/sales-report">
       <img src="../../img/sales-report-logo.png" class="nav-logo"> 
         Sales Reports
      </button>

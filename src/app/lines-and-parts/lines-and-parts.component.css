@@ -1,0 +1,130 @@
+/* Popup Arka Plan */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* Saydam siyah arka plan */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Üst katmanda yer alır */
+}
+
+/* Popup İçerik */
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Hafif gölge efekti */
+  position: relative;
+  font-family: Arial, sans-serif; /* Daha modern bir font */
+}
+
+/* Form Elemanları */
+.popup-content form {
+  display: flex;
+  flex-direction: column; /* Elemanları dikey hizala */
+  gap: 15px; /* Elemanlar arasında boşluk */
+}
+
+.popup-content label {
+  font-weight: bold; /* Kalın yazı */
+  margin-bottom: 5px; /* Label ile input arasında boşluk */
+}
+
+.popup-content input[type="text"],
+.popup-content input[type="number"] {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%; /* Tam genişlik */
+}
+
+.popup-content button {
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup-content button[type="submit"] {
+  background: #28a745;
+  color: white;
+}
+
+.popup-content button[type="button"] {
+  background: #dc3545;
+  color: white;
+}
+
+.popup-content button:hover {
+  opacity: 0.9;
+}
+
+/* Stock Requirements ve Other Requirements */
+.popup-content .requirements-section {
+  margin-top: 15px;
+}
+
+.popup-content .requirements-section h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.popup-content .requirements-section .requirement-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.popup-content .requirements-section input {
+  flex: 1; /* Eleman genişliklerini dengele */
+}
+
+.popup-content .requirements-section button {
+  background: #007bff;
+  color: white;
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+/* Checkbox */
+.popup-content .checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.part-list ul {
+  margin-left: 20px; /* Alt liste için boşluk */
+  list-style-type: circle; /* Alt liste için stil */
+}
+
+.part-list li {
+  margin-bottom: 5px; /* Her bir part için boşluk */
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 50%;
+}
