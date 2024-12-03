@@ -31,7 +31,6 @@
     <li *ngFor="let part of parts">
       Name: {{ part.name }} - 
       Quantity: {{ part.quantity }} - 
-      Purchase Price: {{ part.purchasePrice }} - 
       Sale Price: {{ part.salePrice }}
       <ul *ngIf="part.requirements.length > 0">
         <li *ngFor="let req of part.requirements">
@@ -51,9 +50,6 @@
       
         <label for="quantity">Quantity:</label>
         <input id="quantity" formControlName="quantity" type="number" />
-      
-        <label for="purchasePrice">Purchase Price:</label>
-        <input id="purchasePrice" formControlName="purchasePrice" type="number" />
       
         <label for="salePrice">Sale Price:</label>
         <input id="salePrice" formControlName="salePrice" type="number" />

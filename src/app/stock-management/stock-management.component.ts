@@ -50,19 +50,9 @@ export class StockManagementComponent implements OnInit{
   initForm(): void {
     this.stockForm = this.fb.group({
       name: ['', Validators.required],
-      amount: [0, [Validators.required, Validators.min(1)]],
-      purchasePrice: [0, [Validators.required, Validators.min(0)]],
-      isStockable: [true]
+      purchasePrice: [0, [Validators.required, Validators.min(0)]]
     });
 
-    this.stockForm.get('isStockable')?.valueChanges.subscribe(isStockable => {
-      if (!isStockable) {
-        this.stockForm.patchValue({ amount: 0});
-        this.stockForm.get('amount')?.disable();
-      } else {
-        this.stockForm.get('amount')?.enable();
-      }
-  });
   }
 
   addStock(): void {

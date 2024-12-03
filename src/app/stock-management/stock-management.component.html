@@ -9,14 +9,12 @@
        <thead>
          <tr>
            <th>Name</th>
-           <th>Quantity</th>
            <th>Purchase Price</th>
          </tr>
        </thead>
        <tbody>
          <tr *ngFor="let stock of stocks">
            <td>{{ stock.name }}</td>
-           <td>{{ stock.amount }}</td>
            <td>{{ stock.purchasePrice | currency }}</td>
          </tr>
        </tbody>
@@ -31,16 +29,8 @@
          <label for="name">Material Name:</label>
          <input id="name" formControlName="name" type="text" />
  
-         <label for="amount">Quantity:</label>
-         <input id="amount" formControlName="amount" type="number" />
- 
          <label for="purchasePrice">Purchase Price:</label>
          <input id="purchasePrice" formControlName="purchasePrice" type="number" />
-
-         <label for="isStockable">
-          <input id="isStockable" type="checkbox" formControlName="isStockable" />
-          Is Stockable
-        </label>
  
          <button type="submit" [disabled]="stockForm.invalid">Create</button>
          <button type="button" (click)="closePopup()">Cancel</button>

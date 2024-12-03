@@ -71,7 +71,6 @@ export class LinesAndPartsComponent implements OnInit {
     this.partForm = this.fb.group({
       name: ['', Validators.required],
       quantity: [0, [Validators.required, Validators.min(1)]],
-      purchasePrice: [0, [Validators.required, Validators.min(0)]],
       salePrice: [0, [Validators.required, Validators.min(0)]],
       isFinalProduct: [isFinalProductDefault], // Varsayılan değer buradan geliyor
       stockRequirements: this.fb.array([]),
