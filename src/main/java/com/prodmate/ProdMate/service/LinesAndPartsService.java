@@ -79,7 +79,7 @@ public class LinesAndPartsService {
 
     private void createNewProductionLineWithPart(Part part, Long userId) {
         ProductionLine newProductionLine = new ProductionLine();
-        newProductionLine.setName(part.getName() + " Production Line");
+        newProductionLine.setName(part.getName());
         newProductionLine.setUserId(userId);
         ProductionLine savedNewLine = productionLineRepository.save(newProductionLine);
 

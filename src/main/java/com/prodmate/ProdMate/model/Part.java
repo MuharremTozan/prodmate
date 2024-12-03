@@ -23,9 +23,6 @@ public class Part {
     private Boolean isFinalProduct;
 
     @Column(nullable = false)
-    private Double purchasePrice;
-
-    @Column(nullable = false)
     private Double salePrice;
 
     @OneToMany(mappedBy = "part", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -63,14 +60,6 @@ public class Part {
 
     public void setIsFinalProduct(Boolean isFinalProduct) {
         this.isFinalProduct = isFinalProduct;
-    }
-
-    public Double getPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public void setPurchasePrice(Double purchasePrice) {
-        this.purchasePrice = purchasePrice;
     }
 
     public Double getSalePrice() {

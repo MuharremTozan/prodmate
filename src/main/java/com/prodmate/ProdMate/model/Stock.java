@@ -11,9 +11,7 @@ public class Stock {
     private Long stockId;
 
     private String name;
-    private Integer amount;
     private Double purchasePrice;
-    private Boolean isStockable;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -36,28 +34,12 @@ public class Stock {
         this.name = name;
     }
 
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
     public Double getPurchasePrice() {
         return purchasePrice;
     }
 
     public void setPurchasePrice(Double purchasePrice) {
         this.purchasePrice = purchasePrice;
-    }
-
-    public Boolean getIsStockable() {
-        return isStockable;
-    }
-
-    public void setIsStockable(Boolean isStockable) {
-        this.isStockable = isStockable;
     }
 
     public User getUser() {

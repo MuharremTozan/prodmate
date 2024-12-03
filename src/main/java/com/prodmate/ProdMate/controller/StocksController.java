@@ -21,9 +21,6 @@ public class StocksController {
 
     @PostMapping("/user/{userId}")
     public Stock addStock(@PathVariable Long userId, @RequestBody Stock stock) {
-        if (stock.getIsStockable() == null) {
-            throw new IllegalArgumentException("isStockable is null");
-        }
         return stocksService.addStock(userId, stock);
     }
 

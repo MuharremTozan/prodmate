@@ -26,7 +26,6 @@ public class PartService {
         part.setName(partDetails.getName());
         part.setAmount(partDetails.getAmount());
         part.setIsFinalProduct(partDetails.getIsFinalProduct());
-        part.setPurchasePrice(partDetails.getPurchasePrice());
         part.setSalePrice(partDetails.getSalePrice());
         return partRepository.save(part);
     }

@@ -39,7 +39,6 @@ public class LinesAndPartsController {
         Part newPart = new Part();
         newPart.setName(partData.get("name").toString());
         newPart.setAmount(Integer.valueOf(partData.get("quantity").toString()));
-        newPart.setPurchasePrice(Double.valueOf(partData.get("purchasePrice").toString()));
         newPart.setSalePrice(Double.valueOf(partData.get("salePrice").toString()));
         newPart.setIsFinalProduct(Boolean.valueOf(partData.get("isFinalProduct").toString()));
 
@@ -60,7 +59,6 @@ public class LinesAndPartsController {
                     partData.put("partId", part.getPartId());
                     partData.put("name", part.getName());
                     partData.put("quantity", part.getAmount());
-                    partData.put("purchasePrice", part.getPurchasePrice());
                     partData.put("salePrice", part.getSalePrice());
                     partData.put("isFinalProduct", part.getIsFinalProduct());
 

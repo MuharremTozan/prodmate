@@ -23,10 +23,6 @@ public class StocksService {
         user.setUserId(userId);
         stock.setUser(user);
 
-        if (!stock.getIsStockable()) {
-            stock.setAmount(0);
-        }
-
         return stocksRepository.save(stock);
     }
 
