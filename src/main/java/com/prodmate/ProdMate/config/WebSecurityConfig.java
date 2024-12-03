@@ -21,7 +21,8 @@ public class WebSecurityConfig {
         http
                 .csrf().disable() // CSRF korumasını devre dışı bırak
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll() // Bu endpointlere izin ver
+                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/static/**").permitAll()// Bu endpointlere izin ver
                         .anyRequest().authenticated() // Diğer tüm endpointler kimlik doğrulama gerektirir
                 );
         return http.build();

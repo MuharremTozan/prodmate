@@ -37,7 +37,8 @@ public class UserController {
             User loggedInUser = userService.loginUser(user.getEmail(), user.getPassword());
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Login successful");
-            response.put("user", loggedInUser); // Gerekirse kullanıcı bilgilerini döndürün
+            response.put("userId", loggedInUser.getUserId()); // Kullanıcı ID'sini açıkça döndürün
+            response.put("email", loggedInUser.getEmail()); // Diğer bilgileri gerekirse ekleyin
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             Map<String, String> response = new HashMap<>();
