@@ -26,7 +26,19 @@ public class StocksService {
         return stocksRepository.save(stock);
     }
 
+    public Stock updateStock(Long stockId, Stock stockDetails) {
+        return stocksRepository.findById(stockId).map(stock -> {
+            stock.setName(stockDetails.getName());
+            stock.setPurchasePrice(stockDetails.getPurchasePrice());
+            return stocksRepository.save(stock);
+        }).orElseThrow(() -> new RuntimeException("Stock not found with ID: " + stockId));
+    }
+
     public void deleteStock(Long stockId) {
-        stocksRepository.deleteById(stockId);
+        if (stocksRepository.existsById(stockId)) {
+            stocksRepository.deleteById(stockId);
+        } else {
+            throw new RuntimeException("Stock not found with ID: " + stockId);
+        }
     }
 }

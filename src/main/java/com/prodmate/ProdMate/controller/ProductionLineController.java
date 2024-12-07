@@ -36,8 +36,9 @@ public class ProductionLineController {
         return ResponseEntity.ok(productionLines);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteProductionLine(@PathVariable Long id) {
-        productionLineService.deleteProductionLine(id);
+    @DeleteMapping("/{lineId}")
+    public ResponseEntity<Void> deleteProductionLine(@PathVariable Long lineId) {
+        productionLineService.deleteProductionLineById(lineId);
+        return ResponseEntity.noContent().build();
     }
 }

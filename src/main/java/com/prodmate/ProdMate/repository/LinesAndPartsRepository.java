@@ -17,4 +17,11 @@ public interface LinesAndPartsRepository extends JpaRepository<LinesAndParts, Lo
 
     @Query("SELECT DISTINCT lp.productionLine.productionLineId FROM LinesAndParts lp WHERE lp.part.partId = :partId")
     List<Long> findLineIdsByPartId(@Param("partId") Long partId);
+
+    @Query("SELECT lp FROM LinesAndParts lp WHERE lp.productionLine = :productionLine")
+    List<LinesAndParts> findAllByProductionLine(@Param("productionLine") ProductionLine productionLine);
+
+    @Query("SELECT lp FROM LinesAndParts lp WHERE lp.productionLine.productionLineId = :lineId ORDER BY lp.productionLine.productionLineId ASC")
+    List<LinesAndParts> findPartsByProductionLineId(@Param("lineId") Long lineId);
+
 }

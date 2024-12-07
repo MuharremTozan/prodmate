@@ -2,6 +2,7 @@ package com.prodmate.ProdMate.controller;
 
 import com.prodmate.ProdMate.model.LinesAndParts;
 import com.prodmate.ProdMate.model.Part;
+import com.prodmate.ProdMate.model.Stock;
 import com.prodmate.ProdMate.repository.LinesAndPartsRepository;
 import com.prodmate.ProdMate.repository.StocksRepository;
 import com.prodmate.ProdMate.service.LinesAndPartsService;
@@ -66,8 +67,10 @@ public class LinesAndPartsController {
                     List<Map<String, Object>> requirements = part.getRequirements().stream()
                             .map(req -> {
                                 Map<String, Object> reqMap = new HashMap<>();
+                                reqMap.put("stockId", req.getStock().getStockId());
                                 reqMap.put("stockName", req.getStock().getName());
                                 reqMap.put("amount", req.getAmount());
+                                reqMap.put("unitCost", req.getStock().getPurchasePrice());
                                 return reqMap;
                             })
                             .collect(Collectors.toList());
@@ -77,6 +80,47 @@ public class LinesAndPartsController {
                 })
                 .collect(Collectors.toList());
     }
+
+    @GetMapping("/final-products")
+    public ResponseEntity<List<Map<String, Object>>> getFinalProductsByUser(@RequestParam Long userId) {
+        List<LinesAndParts> finalProducts = linesAndPartsService.getFinalProductsByUserId(userId);
+        List<Map<String, Object>> finalProductData = finalProducts.stream()
+                .map(relation -> {
+                    Map<String, Object> productMap = new HashMap<>();
+                    Part part = relation.getPart();
+                    productMap.put("partId", part.getPartId());
+                    productMap.put("name", part.getName());
+                    productMap.put("salePrice", part.getSalePrice());
+                    productMap.put("productionLineName", relation.getProductionLine().getName());
+                    return productMap;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(finalProductData);
+    }
+
+    @GetMapping("/primary-final-products")
+    public ResponseEntity<List<Map<String, Object>>> getPrimaryFinalProductsByUser(@RequestParam Long userId) {
+        List<Map<String, Object>> productData = linesAndPartsService.getPrimaryFinalProductsByUserId(userId);
+        return ResponseEntity.ok(productData);
+    }
+
+
+
+    @GetMapping("/stocks")
+    public ResponseEntity<List<Map<String, Object>>> getAllStocks() {
+        List<Stock> stocks = stocksRepository.findAll();
+        List<Map<String, Object>> response = stocks.stream()
+                .map(stock -> {
+                    Map<String, Object> stockData = new HashMap<>();
+                    stockData.put("stockId", stock.getStockId());
+                    stockData.put("stockName", stock.getName());
+                    stockData.put("unitCost", stock.getPurchasePrice());
+                    return stockData;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
+
 
 
     @DeleteMapping("/{id}")

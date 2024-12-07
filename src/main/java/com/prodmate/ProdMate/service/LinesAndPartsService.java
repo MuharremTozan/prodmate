@@ -11,6 +11,7 @@ import com.prodmate.ProdMate.repository.StocksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -65,6 +66,9 @@ public class LinesAndPartsService {
         linesAndParts.setPart(savedPart);
         linesAndPartsRepository.save(linesAndParts);
 
+        if (!newPart.getIsFinalProduct()) {
+            newPart.setSalePrice(0.0);
+        }
 
 
         if (newPart.getIsFinalProduct()) {
@@ -88,6 +92,56 @@ public class LinesAndPartsService {
         newRelation.setPart(part);
         linesAndPartsRepository.save(newRelation);
     }
+
+    public List<LinesAndParts> getFinalProductsByUserId(Long userId) {
+        List<ProductionLine> productionLines = productionLineRepository.findByUserId(userId);
+
+        return productionLines.stream()
+                .flatMap(line -> linesAndPartsRepository.findAllByProductionLine(line).stream())
+                .filter(relation -> relation.getPart().getIsFinalProduct() && relation.getPart().getSalePrice() > 0)
+                .collect(Collectors.toList());
+    }
+
+    public List<Map<String, Object>> getPrimaryFinalProductsByUserId(Long userId) {
+        List<ProductionLine> productionLines = productionLineRepository.findByUserId(userId);
+
+        return productionLines.stream()
+                .flatMap(line -> linesAndPartsRepository.findAllByProductionLine(line).stream())
+                .filter(relation -> {
+                    Long partId = relation.getPart().getPartId();
+                    Long lineId = relation.getProductionLine().getProductionLineId();
+                    return isFirstPartInLine(partId, lineId); // Sadece ilk parça kontrolü
+                })
+                .filter(relation -> relation.getPart().getIsFinalProduct() && relation.getPart().getSalePrice() > 0)
+                .map(relation -> {
+                    Map<String, Object> productData = new HashMap<>();
+                    Part part = relation.getPart();
+                    productData.put("partId", part.getPartId());
+                    productData.put("name", part.getName());
+                    productData.put("salePrice", part.getSalePrice());
+                    productData.put("lineId", relation.getProductionLine().getProductionLineId());
+                    productData.put("stockRequirements", part.getRequirements().stream()
+                            .map(req -> {
+                                Map<String, Object> reqData = new HashMap<>();
+                                reqData.put("stockId", req.getStock().getStockId());
+                                reqData.put("stockName", req.getStock().getName());
+                                reqData.put("amount", req.getAmount());
+                                reqData.put("unitCost", req.getStock().getPurchasePrice());
+                                return reqData;
+                            })
+                            .collect(Collectors.toList()));
+                    return productData;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+
+    public boolean isFirstPartInLine(Long partId, Long lineId) {
+        List<LinesAndParts> partsInLine = linesAndPartsRepository.findPartsByProductionLineId(lineId);
+        return !partsInLine.isEmpty() && partsInLine.get(0).getPart().getPartId().equals(partId);
+    }
+
 
 
     public List<LinesAndParts> getPartsByProductionLineId(Long productionLineId) {

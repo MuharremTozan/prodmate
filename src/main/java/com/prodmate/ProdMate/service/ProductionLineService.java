@@ -28,7 +28,11 @@ public class ProductionLineService {
         return productionLineRepository.findByUserId(userId);
     }
 
-    public void deleteProductionLine(Long productionLineId) {
-        productionLineRepository.deleteById(productionLineId);
+    public void deleteProductionLineById(Long lineId) {
+        if (productionLineRepository.existsById(lineId)) {
+            productionLineRepository.deleteById(lineId);
+        } else {
+            throw new RuntimeException("Production line not found with ID: " + lineId);
+        }
     }
 }

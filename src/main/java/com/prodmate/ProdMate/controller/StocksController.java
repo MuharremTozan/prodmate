@@ -24,6 +24,11 @@ public class StocksController {
         return stocksService.addStock(userId, stock);
     }
 
+    @PutMapping("/{stockId}")
+    public Stock updateStock(@PathVariable Long stockId, @RequestBody Stock stockDetails) {
+        return stocksService.updateStock(stockId, stockDetails);
+    }
+
     @DeleteMapping("/{stockId}")
     public void deleteStock(@PathVariable Long stockId) {
         stocksService.deleteStock(stockId);
