@@ -11,6 +11,28 @@
    border-radius: 5px;
    cursor: pointer;
  }
+
+ .btn-edit {
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-edit:hover, .btn-delete:hover {
+  opacity: 0.8;
+}
  
  table {
    width: 100%;

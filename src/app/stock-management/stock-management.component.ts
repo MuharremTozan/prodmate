@@ -15,6 +15,8 @@ export class StockManagementComponent implements OnInit{
   stocks: any[] = [];
   stockForm!: FormGroup;
   showPopup: boolean = false;
+  isEditMode: boolean = false;
+  editingStockId!: number | null;
   userId!: number;
 
   constructor(private http: HttpClient, private fb: FormBuilder, private authService: AuthService){}
@@ -59,8 +61,8 @@ export class StockManagementComponent implements OnInit{
     if (this.stockForm.valid) {
       this.http.post(`http://localhost:8080/api/stocks/user/${this.userId}`, this.stockForm.value)
         .subscribe(response => {
-          this.stocks.push(response); // Yeni stok listeye ekleniyor
-          this.closePopup(); // Popup'ı kapat
+          this.stocks.push(response); 
+          this.closePopup();
         }, error => {
           console.error('Failed to add stock:', error);
         });
@@ -69,11 +71,47 @@ export class StockManagementComponent implements OnInit{
 
   openPopup(): void {
     this.showPopup = true;
+    this.isEditMode = false;
+    this.stockForm.reset();
+  }
+
+  openEditPopup(stock : any): void {
+    this.showPopup = true;
+    this.isEditMode = true;
+    this.editingStockId = stock.stockId;
+    this.stockForm.patchValue(stock);
+  }
+
+  updateStock(): void {
+    if (this.stockForm.valid && this.editingStockId) {
+      this.http.put(`http://localhost:8080/api/stocks/${this.editingStockId}`, this.stockForm.value)
+        .subscribe(response => {
+          const index = this.stocks.findIndex(stock => stock.stockId === this.editingStockId);
+          if (index > -1) {
+            this.stocks[index] = response; 
+          }
+          this.closePopup();
+        }, error => {
+          console.error('Failed to update stock:', error);
+        });
+    }
+  }
+
+  deleteStock(stockId: number): void {
+    if (confirm('Are you sure you want to delete this stock?')) {
+      this.http.delete(`http://localhost:8080/api/stocks/${stockId}`)
+        .subscribe(() => {
+          this.stocks = this.stocks.filter(stock => stock.stockId !== stockId);
+        }, error => {
+          console.error('Failed to delete stock:', error);
+        });
+    }
   }
 
   closePopup(): void {
     this.showPopup = false;
-    this.stockForm.reset(); // Formu sıfırla
+    this.stockForm.reset();
+    this.editingStockId = null;
   }
 
 }

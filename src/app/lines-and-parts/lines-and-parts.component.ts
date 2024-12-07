@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-lines-and-parts',
@@ -18,7 +18,9 @@ export class LinesAndPartsComponent implements OnInit {
   partForm!: FormGroup;
   stocks: any[] = [];
   requirmentAmounts: number[] = [];
-  showPopup: boolean = false; // Popup kontrolü için
+  showPopup: boolean = false; 
+  isEditMode: boolean = false;
+  editingPartId!: number | null;
   isReportModalOpen: boolean = false;
   produceTimes: number = 1;
   materialReport: any[] = [];
@@ -28,7 +30,8 @@ export class LinesAndPartsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -44,13 +47,13 @@ export class LinesAndPartsComponent implements OnInit {
   fetchParts(lineId: number): void {
     this.http.get<any[]>(`http://localhost:8080/api/lines-and-parts/${lineId}`)
         .subscribe(response => {
-          console.log('Fetched parts:', response); // Gelen yanıtı logla
+          console.log('Fetched parts:', response); 
           this.parts = response.map(part => ({
             ...part,
             partId: part.partId,
-            requirements: part.stockRequirements || [] // Requirements ekle
+            requirements: part.stockRequirements || [] 
           }));
-            this.initPartForm(); // Formu part durumuna göre başlat
+            this.initPartForm(); 
         }, error => {
             console.error('Failed to fetch parts:', error);
         });
@@ -72,14 +75,15 @@ export class LinesAndPartsComponent implements OnInit {
       name: ['', Validators.required],
       quantity: [0, [Validators.required, Validators.min(1)]],
       salePrice: [0, [Validators.required, Validators.min(0)]],
-      isFinalProduct: [isFinalProductDefault], // Varsayılan değer buradan geliyor
+      isFinalProduct: [isFinalProductDefault], 
       stockRequirements: this.fb.array([]),
     });
   }
 
   openPartForm(): void {
     this.showPopup = true;
-    this.initPartForm(); // Formu sıfırla ve varsayılan değerleri yükle
+    this.isEditMode = false;
+    this.initPartForm(); 
   }
 
   closePartForm(): void {
@@ -96,8 +100,8 @@ export class LinesAndPartsComponent implements OnInit {
   
   addStockRequirement(): void {
     const requirementForm = this.fb.group({
-      stockId: ['', Validators.required], // Dropdown için stok ID'si
-      amount: [0, [Validators.required, Validators.min(1)]] // Kullanıcıdan alınan miktar
+      stockId: ['', Validators.required], 
+      amount: [0, [Validators.required, Validators.min(1)]]
     });
 
     this.stockRequirements.push(requirementForm);
@@ -119,7 +123,7 @@ export class LinesAndPartsComponent implements OnInit {
             console.log('Part added to existing production line: ', response);
           }
 
-          this.fetchParts(this.lineId); // Mevcut üretim hattı partlarını güncelle
+          this.fetchParts(this.lineId); 
         }, error => {
           console.error('Failed to create part:', error);
         }
@@ -131,13 +135,13 @@ export class LinesAndPartsComponent implements OnInit {
 
     openMaterialReport(): void {
       this.isReportModalOpen = true;
-      this.materialReport = []; // Reset report
+      this.materialReport = [];
   }
   
   closeMaterialReport(): void {
       this.isReportModalOpen = false;
-      this.produceTimes = 1; // Reset input
-      this.materialReport = []; // Clear report
+      this.produceTimes = 1; 
+      this.materialReport = []; 
   }
 
   async calculateNeededMaterials(): Promise<void> {
@@ -149,8 +153,8 @@ export class LinesAndPartsComponent implements OnInit {
     }
 
     const calculatedMaterials: { stockName: string; totalAmount: number }[] = [];
-    const visitedLines = new Set<number>(); // Ziyaret edilen üretim hatlarını takip edin
-    const visitedParts = new Set<number>(); // Ziyaret edilen parçaları takip edin
+    const visitedLines = new Set<number>();
+    const visitedParts = new Set<number>();
 
     await this.processLine(this.lineId, produceTimes, calculatedMaterials, visitedLines, visitedParts);
 
@@ -168,19 +172,19 @@ async processLine(
 ): Promise<void> {
   if (visitedLines.has(lineId)) {
       console.log(`Line ${lineId} already processed, skipping.`);
-      return; // Daha önce işlenmiş bir hattı tekrar işlemeyin
+      return; 
   }
 
-  visitedLines.add(lineId); // Bu hattı işlenmiş olarak işaretle
+  visitedLines.add(lineId);
   const parts = await this.fetchSubProductionLine(lineId);
 
   for (const part of parts) {
       if (visitedParts.has(part.partId)) {
         console.log(`Part ${part.name} (partId: ${part.partId}) already processed in another line, skipping.`);
-            continue; // Bu parça daha önce başka bir hatta işlendi
+            continue; 
       }
 
-      visitedParts.add(part.partId); // Bu parça işlenmiş olarak işaretle
+      visitedParts.add(part.partId);
 
       if (!part.stockRequirements) {
           console.warn(`Part ${part.name} has no requirements.`);
@@ -267,8 +271,81 @@ fetchSubProductionLinesByPartId(partId: number): Promise<number[]> {
       });
 }
 
+openEditPopup(part: any): void {
+  this.showPopup = true; 
+  this.isEditMode = true; 
+  this.editingPartId = part.partId; 
+
+  // Formu seçilen part bilgileriyle doldur
+  this.partForm.patchValue({
+    name: part.name,
+    quantity: part.quantity || 1, 
+    salePrice: part.salePrice || 0, 
+    isFinalProduct: part.isFinalProduct,
+    stockRequirements: part.stockRequirements || [],
+  });
+
+  // Gereksinimler formunu temizle ve yeniden doldur
+  this.stockRequirements.clear();
+  if (part.stockRequirements) {
+    part.stockRequirements.forEach((req: any) => {
+      this.stockRequirements.push(
+        this.fb.group({
+          stockId: [req.stockId, Validators.required],
+          amount: [req.amount || 1, [Validators.required, Validators.min(1)]],
+        })
+      );
+    });
+  }
+}
 
 
+updatePart(): void {
+  if (this.partForm.valid && this.editingPartId) {
+    // Form verilerini backend için formatla
+    const updatedPart = {
+      ...this.partForm.value,
+      partId: this.editingPartId,
+      lineId: this.lineId,
+    };
+
+    this.http.put(`http://localhost:8080/api/parts/${this.editingPartId}`, updatedPart)
+      .subscribe(() => {
+        console.log(`Part ${this.editingPartId} updated successfully.`);
+        this.fetchParts(this.lineId);
+        this.closePartForm();
+      }, error => {
+        console.error(`Failed to update part ${this.editingPartId}:`, error);
+      });
+  } else {
+    console.error('Part form is invalid or no part is being edited.');
+  }
+}
+
+
+deletePart(partId: number): void {
+  if (confirm('Are you sure you want to delete this part?')) {
+    this.http.delete(`http://localhost:8080/api/parts/${partId}`)
+      .subscribe(() => {
+        console.log(`Part ${partId} deleted successfully.`);
+        this.parts = this.parts.filter(part => part.partId !== partId);
+      }, error => {
+        console.error(`Failed to delete part ${partId}:`, error);
+      });
+  }
+}
+
+deleteLine(): void {
+  if (confirm('Are you sure you want to delete this production line?')) {
+    this.http.delete(`http://localhost:8080/api/production-lines/${this.lineId}`)
+      .subscribe(() => {
+        console.log(`Production line ${this.lineId} deleted successfully.`);
+        this.router.navigate(['/production-lines']);
+      }, error => {
+        console.error(`Failed to delete production line ${this.lineId}:`, error);
+      });
+  }
+}
 
 
 

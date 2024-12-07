@@ -1,3 +1,101 @@
+/* Genel Düzen */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
+
+/* Butonlar */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+}
+
+.btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-create {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-report {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-delete-line {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+/* Part Kart Tasarımı */
+.part-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+
+.part-card h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.part-card p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.requirements h4 {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #555;
+}
+
+.requirements ul {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.requirements ul li {
+  font-size: 14px;
+  color: #444;
+}
+
+/* Kart Aksiyonları */
+.card-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end; /* Butonları sağa hizala */
+  position: absolute; /* Butonları kartın altına sabitle */
+  bottom: 10px; 
+  right: 10px; 
+}
+
+.no-parts {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 16px;
+  color: #999;
+}
+
+
+
 /* Popup Arka Plan */
 .popup-overlay {
   position: fixed;
@@ -17,11 +115,10 @@
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 400px;
+  width: 450px;
   max-width: 90%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Hafif gölge efekti */
-  position: relative;
-  font-family: Arial, sans-serif; /* Daha modern bir font */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
 }
 
 /* Form Elemanları */
@@ -32,17 +129,20 @@
 }
 
 .popup-content label {
-  font-weight: bold; /* Kalın yazı */
-  margin-bottom: 5px; /* Label ile input arasında boşluk */
+  font-weight: bold; 
+  margin-bottom: 5px; 
+  font-size: 14px;
 }
 
 .popup-content input[type="text"],
-.popup-content input[type="number"] {
+.popup-content input[type="number"],
+.popup-content select {
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  width: 100%; /* Tam genişlik */
+  width: 100%; 
+  box-sizing: border-box; 
 }
 
 .popup-content button {
@@ -69,7 +169,7 @@
 
 /* Stock Requirements ve Other Requirements */
 .popup-content .requirements-section {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 .popup-content .requirements-section h4 {
@@ -83,8 +183,51 @@
   gap: 10px;
 }
 
+.requirement-item {
+  margin-bottom: 10px;
+}
+
+.requirement-item select,
+.requirement-item input {
+  flex: 1;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
 .popup-content .requirements-section input {
-  flex: 1; /* Eleman genişliklerini dengele */
+  flex: 1; 
+}
+
+.requirement-item button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.requirement-item button:hover {
+  background-color: #0056b3;
+}
+
+/* Add Stock Requirement Button */
+.requirements-section button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.requirements-section button:hover {
+  background-color: #0056b3;
 }
 
 .popup-content .requirements-section button {
@@ -101,13 +244,17 @@
   gap: 10px;
 }
 
+.popup-content .checkbox-container label {
+  font-size: 14px;
+}
+
 .part-list ul {
-  margin-left: 20px; /* Alt liste için boşluk */
-  list-style-type: circle; /* Alt liste için stil */
+  margin-left: 20px; 
+  list-style-type: circle;
 }
 
 .part-list li {
-  margin-bottom: 5px; /* Her bir part için boşluk */
+  margin-bottom: 5px;
 }
 
 .modal {
@@ -116,15 +263,127 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 999; /* Modal her şeyin üzerinde olacak */
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .modal-content {
   background: white;
   padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 600px;
+  z-index: 1000; /* Modal içeriği arka plandan daha üstte */
+}
+
+/* Modal İçerik Başlık ve Form */
+.modal-content h3 {
+  margin-top: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-content button {
+  align-self: flex-end;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
   border-radius: 5px;
-  width: 50%;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-edit:hover, .btn-delete:hover {
+  opacity: 0.8;
+}
+
+.btn-delete-line {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.btn-delete-line:hover {
+  opacity: 0.8;
+}
+
+/* Final Product Simge ve Bilgi */
+.final-product {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+  color: #28a745;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.final-product-icon {
+  font-size: 18px;
+  color: #ffc107; 
+}
+
+/* Part Header */
+.part-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.part-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+/* Genel Part Kartı Ayarları */
+.part-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative; /* Butonları içeri yerleştirmek için relative kullanılır */
+  min-height: 200px; /* Kartın sabit bir yüksekliği olur */
+}
+
+.part-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }

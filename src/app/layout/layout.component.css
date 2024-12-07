@@ -3,8 +3,8 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
 .layout {
-   font-family: 'JetBrains Mono', monospace; /* Fontu JetBrains Mono yap */
-   background-color: #f9f9f9; /* Açık tema için arka plan */
+   font-family: 'JetBrains Mono', monospace;
+   background-color: #f9f9f9;
    color: #333;
    min-height: 100vh;
    display: flex;
@@ -12,7 +12,7 @@
 }
 
 .logo {
-   height: 60px; /* Logonun yüksekliğini ayarlayabilirsin */
+   height: 60px;
 }
 
 .nav-logo {
@@ -38,12 +38,12 @@
 }
  
 .app-title-prod {
-   color: #0056b3; /* Hafif mavi ton */
+   color: #0056b3;
    font-weight: bold;
    margin: 0;
 }
 .app-title-mate {
-   color: #e4a00e; /* Hafif mavi ton */
+   color: #e4a00e;
    font-weight: bold;
    margin: 0;
 }
@@ -58,7 +58,7 @@
    padding: 5px;
 
    position: sticky;
-   top: 60px; /* Header yüksekliğine göre ayarlayın */
+   top: 60px;
    z-index: 999; /* Header'ın hemen altında olacak şekilde */
  }
  

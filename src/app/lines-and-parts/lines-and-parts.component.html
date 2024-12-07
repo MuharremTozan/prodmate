@@ -1,7 +1,8 @@
-<div>
-  <button (click)="openPartForm()" class="btn-create">Create Part</button>
-
-  <button (click)="openMaterialReport()">Needed Materials Report</button>
+<div class="action-buttons">
+  <button (click)="openPartForm()" class="btn btn-create">Create Part</button>
+  <button (click)="openMaterialReport()" class="btn btn-report">Needed Materials Report</button>
+  <button (click)="deleteLine()" class="btn btn-delete-line">Delete Line</button>
+</div>
 
 <!-- Needed Materials Report Modal -->
 <div *ngIf="isReportModalOpen" class="modal">
@@ -25,37 +26,56 @@
 </div>
 
 
-
-  <!-- Part List -->
-  <ul *ngIf="parts.length > 0" class="part-list">
-    <li *ngFor="let part of parts">
-      Name: {{ part.name }} - 
-      Quantity: {{ part.quantity }} - 
-      Sale Price: {{ part.salePrice }}
-      <ul *ngIf="part.requirements.length > 0">
+<div class="part-container">
+  <div *ngFor="let part of parts" class="part-card">
+    <div class="part-header">
+      <h3>{{ part.name }}</h3>
+      <!-- Eğer Final Product ise simge ve bilgi göster -->
+      <div *ngIf="part.isFinalProduct" class="final-product">
+        <span class="final-product-icon">⭐</span> <!-- Final Product simgesi -->
+        <small>Has sub-production line</small>
+      </div>
+    </div>
+    <p>Quantity: <strong>{{ part.quantity }}</strong></p>
+    <p *ngIf="part.salePrice !== 0">Sale Price: <strong>{{ part.salePrice }}</strong></p>
+  
+    <div *ngIf="part.requirements.length > 0" class="requirements">
+      <h4>Requirements:</h4>
+      <ul>
         <li *ngFor="let req of part.requirements">
-          Required Stock: {{ req.stockName }} - Amount: {{ req.amount }}
+          {{ req.stockName }} - Amount: {{ req.amount }}
         </li>
       </ul>
-    </li>
-  </ul>
+    </div>
+  
+    <div class="card-actions">
+      <button (click)="openEditPopup(part)" class="btn btn-edit">Edit</button>
+      <button (click)="deletePart(part.partId)" class="btn btn-delete">Delete</button>
+    </div>
+  </div>
+</div>
+
+
+
   <p *ngIf="parts.length === 0">No parts available</p>
 
   <!-- Popup Form -->
   <div class="popup-overlay" *ngIf="showPopup">
     <div class="popup-content">
-      <form [formGroup]="partForm" (ngSubmit)="createPart()">
+      <form [formGroup]="partForm" (ngSubmit)="isEditMode ? updatePart() : createPart()">
         <label for="name">Part Name:</label>
-        <input id="name" formControlName="name" type="text" />
+        <input id="name" formControlName="name" type="text" placeholder="Enter part name" />
       
-        <label for="quantity">Quantity:</label>
-        <input id="quantity" formControlName="quantity" type="number" />
+        <label for="quantity">Quantity(Unit):</label>
+        <input id="quantity" formControlName="quantity" type="number" placeholder="Enter quantity" />
       
-        <label for="salePrice">Sale Price:</label>
-        <input id="salePrice" formControlName="salePrice" type="number" />
-      
+        <div *ngIf="partForm.get('isFinalProduct')?.value">
+          <label for="salePrice">Sale Price(Unit):</label>
+          <input id="salePrice" formControlName="salePrice" type="number" />
+        </div>
+        
         <div class="requirements-section">
-          <h4>Stock Requirements</h4>
+          <h4>Stock Requirements(Unit)</h4>
           <div *ngFor="let requirement of stockRequirements.controls; let i = index" [formGroup]="getRequirementFormGroup(i)" class="requirement-item">
             <!-- Dropdown for stock selection -->
             <select formControlName="stockId">
@@ -68,7 +88,7 @@
           <button type="button" (click)="addStockRequirement()">Add Stock Requirement</button>
         </div>
       
-        <div class="checkbox-container">
+        <div class="checkbox-container" *ngIf="!isEditMode">
           <input type="checkbox" formControlName="isFinalProduct" />
           <label for="isFinalProduct">Is Final Product</label>
         </div>
@@ -77,9 +97,8 @@
           Selecting "Is Final Product" will create a new production line for this part.
         </div>
       
-        <button type="submit">Create</button>
+        <button type="submit">{{ isEditMode ? 'Update' : 'Create' }}</button>
         <button type="button" (click)="closePartForm()">Cancel</button>
       </form>
     </div>
   </div>
-</div>

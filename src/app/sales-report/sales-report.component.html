@@ -1,1 +1,35 @@
-<p>sales-report works!</p>
+<div *ngIf="finalProducts.length > 0">
+   <ul class="product-list">
+     <li *ngFor="let product of finalProducts" (click)="openCalculationPopup(product)" class="product-item">
+       <p>Name: {{ product.name }}</p>
+       <p>Production Line: {{ product.productionLineName }}</p>
+       <p>Sale Price: {{ product.salePrice }}</p>
+     </li>
+   </ul>
+ </div>
+ <div *ngIf="finalProducts.length === 0">
+   <p>No final products available.</p>
+ </div>
+ 
+ <div class="modal" *ngIf="selectedProduct">
+   <div class="modal-content">
+      
+
+      <form [formGroup]="calculationForm" (ngSubmit)="calculateProfit()">
+      <h3>Calculate Profit for {{ selectedProduct.name }}</h3>
+      <label>Production Amount:</label>
+      <input type="number" formControlName="produceTimes" />
+      <button type="submit" [disabled]="calculationForm.invalid">Calculate</button>
+      </form>
+ 
+      <div *ngIf="calculationResult">
+         <p>Sales Revenue: {{ calculationResult.salesRevenue }}</p>
+         <p>Material Costs: {{ calculationResult.cost }}</p>
+         <p>Profit: {{ calculationResult.profit }}</p>
+      </div>
+      
+      <button type="button" class="close-modal" (click)="closeCalculationPopup()">×</button>
+   </div>
+ </div>
+ 
+ 

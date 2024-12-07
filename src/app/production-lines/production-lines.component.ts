@@ -79,7 +79,7 @@ export class ProductionLinesComponent implements OnInit {
       return;
     }
     console.log(productionLineId);
-    this.router.navigate(['/production-lines', productionLineId]); // Doğru URL kullanımı
+    this.router.navigate(['/production-lines', productionLineId]); 
   }
 
 
